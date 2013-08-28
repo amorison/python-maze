@@ -4,7 +4,8 @@ import random
 import time
 
 WIDTH , HEIGHT = 20 , 20
-WHI=(50,150,150)
+CRD=(0,0,150)
+WAL=(0,175,0)
 
 def calcMaze(w,h):
     visitedCells=[[False for i in range(h)] for j in range(w)] #bool True if x,y already visited
@@ -54,20 +55,34 @@ def drawMaze():
     pg.display.flip()
 
 def drawWalls(wa,x,y):
-    if not wa[x][y][0]:pg.draw.rect(surf,WHI, [x*10+3,y*10,4,7])
-    if not wa[x][y][1]:pg.draw.rect(surf,WHI, [x*10+3,y*10+3,4,7])
-    if not wa[x][y][2]:pg.draw.rect(surf,WHI, [x*10,y*10+3,7,4])
-    if not wa[x][y][3]:pg.draw.rect(surf,WHI, [x*10+3,y*10+3,7,4])
+    pg.draw.rect(surf,CRD,[x*10+3,y*10+3,4,4])
+    pg.draw.rect(surf,WAL,[x*10+2,y*10+2,6,6],1)
+    if not wa[x][y][0]:
+        pg.draw.rect(surf,CRD, [x*10+3,y*10,4,3])
+        pg.draw.line(surf,WAL,[x*10+2,y*10],[x*10+2,y*10+2])
+        pg.draw.line(surf,WAL,[x*10+7,y*10],[x*10+7,y*10+2])
+    if not wa[x][y][1]:
+        pg.draw.rect(surf,CRD, [x*10+3,y*10+7,4,3])
+        pg.draw.line(surf,WAL,[x*10+2,y*10+7],[x*10+2,y*10+9])
+        pg.draw.line(surf,WAL,[x*10+7,y*10+7],[x*10+7,y*10+9])
+    if not wa[x][y][2]:
+        pg.draw.rect(surf,CRD, [x*10,y*10+3,3,4])
+        pg.draw.line(surf,WAL,[x*10,y*10+2],[x*10+2,y*10+2])
+        pg.draw.line(surf,WAL,[x*10,y*10+7],[x*10+2,y*10+7])
+    if not wa[x][y][3]:
+        pg.draw.rect(surf,CRD, [x*10+7,y*10+3,3,4])
+        pg.draw.line(surf,WAL,[x*10+7,y*10+2],[x*10+9,y*10+2])
+        pg.draw.line(surf,WAL,[x*10+7,y*10+7],[x*10+9,y*10+7])
 
 def drawBridge(br,x,y):
     if br[x][y]==1:
-        pg.draw.rect(surf,WHI,[x*10+3,y*10,4,10])
-        pg.draw.line(surf,(0,0,0),[x*10+2,y*10],[x*10+2,y*10+10])
-        pg.draw.line(surf,(0,0,0),[x*10+7,y*10],[x*10+7,y*10+10])
+        pg.draw.rect(surf,CRD,[x*10+3,y*10,4,10])
+        pg.draw.line(surf,WAL,[x*10+2,y*10],[x*10+2,y*10+9])
+        pg.draw.line(surf,WAL,[x*10+7,y*10],[x*10+7,y*10+9])
     if br[x][y]==2:
-        pg.draw.rect(surf,WHI,[x*10,y*10+3,10,4])
-        pg.draw.line(surf,(0,0,0),[x*10,y*10+2],[x*10+10,y*10+2])
-        pg.draw.line(surf,(0,0,0),[x*10,y*10+7],[x*10+10,y*10+7])
+        pg.draw.rect(surf,CRD,[x*10,y*10+3,10,4])
+        pg.draw.line(surf,WAL,[x*10,y*10+2],[x*10+9,y*10+2])
+        pg.draw.line(surf,WAL,[x*10,y*10+7],[x*10+9,y*10+7])
 
 def moves(k):
     li=[K_UP,K_DOWN,K_LEFT,K_RIGHT]
