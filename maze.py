@@ -2,6 +2,7 @@ import pygame as pg
 from pygame.locals import *
 import random
 import time
+from sys import argv
 
 WIDTH , HEIGHT = 20 , 20
 CRD=(0,0,150)
@@ -98,21 +99,35 @@ def moves(k):
         else:sN=0
     drawWalls(walls,xP,yP)
     drawBridge(bridge,xP,yP)
-    drawWalls(walls,xN,yN)
-    if not sN:pg.draw.rect(surf,(255,55,55),[xN*10+3,yN*10+3,4,4])
-    drawBridge(bridge,xN,yN)
-    if sN:pg.draw.rect(surf,(255,55,55),[xN*10+3,yN*10+3,4,4])
-    pg.display.flip()
+    drawPlayer(xN,yN,sN)
     return xN,yN,sN
 
+def drawPlayer(x,y,s):
+    drawWalls(walls,x,y)
+    if not s:pg.draw.rect(surf,(255,55,55),[x*10+3,y*10+3,4,4])
+    drawBridge(bridge,x,y)
+    if s:pg.draw.rect(surf,(255,55,55),[x*10+3,y*10+3,4,4])
+    pg.display.flip()
+
+
 pg.init()
+try:
+    if len(argv)>=3:HEIGHT=int(argv[2])
+    if HEIGHT<=0:raise ValueError
+except ValueError:
+    HEIGHT=20
+try:
+    if len(argv)>=2:WIDTH=int(argv[1])
+    if WIDTH<=0:raise ValueError
+except ValueError:
+    WIDTH=20
 surf = pg.display.set_mode((10*WIDTH,10*HEIGHT))
 pg.display.set_caption("Maze")
 pg.key.set_repeat(80,20)
 walls,bridge = calcMaze(WIDTH,HEIGHT)
 xP,yP=(0,0)#player position
 sP=0 #1 if player on bridge
-moves(K_UP)
+drawPlayer(xP,yP,sP)
 ok=True
 while ok:
     time.sleep(0.01)
@@ -123,11 +138,10 @@ while ok:
             k=evt.key
             if k==K_d:
                 drawMaze()
-                xP,yP,sP=moves(K_UP)
-                xP,yP,sP=moves(K_DOWN)
+                drawPlayer(xP,yP,sP)
             xP,yP,sP=moves(k)
             if (xP,yP)==(WIDTH-1,HEIGHT-1):
                 walls,bridge=calcMaze(WIDTH,HEIGHT)
                 surf.fill((0,0,0))
                 xP,yP,sP=0,0,0
-                moves(K_UP)
+                drawPlayer(xP,yP,sP)
